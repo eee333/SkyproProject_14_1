@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, Response, jsonify
 def query_db(sqlite_query):
     with sqlite3.connect("netflix.db") as connection:
         cursor = connection.cursor()
-        # sqlite_query = ("SELECT DISTINCT director, title FROM netflix ")  # TODO измените код запроса
+        # sqlite_query = ("SELECT DISTINCT director, title FROM netflix ")
         cursor.execute(sqlite_query)
         fields = [description[0] for description in cursor.description]
         result = []
