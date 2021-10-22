@@ -25,10 +25,15 @@ app = Flask(__name__)
 def search():
     result = []
     status = '200'
+    type_ = request.args.get('type') # Example: http://127.0.0.1:5000/movie?type=Movie
     title = request.args.get('title') # Example: http://127.0.0.1:5000/movie?title=Tarzan
     year = request.args.get('year') # Example: /movie?year=1973-1975 or /movie?year=1975
     genre = request.args.get('genre')  # Example: http://127.0.0.1:5000/movie?genre=Children & Family Movies
-    if title:
+    if type_ and year and genre: # Example: /movie?genre=Dramas&type=Movie&year=1973
+        year = int(year)
+        result = query_db(
+            f"SELECT title, description FROM netflix WHERE type = '{type_}' AND release_year = {year} AND listed_in LIKE '%{genre}%' ORDER BY title")
+    elif title:
         result = query_db(f"SELECT title, country, release_year, listed_in, description FROM netflix WHERE title = '{title}' ORDER BY release_year DESC")
     elif year:
         if '-' in year:
