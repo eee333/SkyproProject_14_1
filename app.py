@@ -21,9 +21,11 @@ def query_db(sqlite_query):
 app = Flask(__name__)
 
 
-@app.route('/movie/<title>/')
-def search_title(title):
-    result = query_db("SELECT DISTINCT director FROM netflix")
+@app.route('/movie')
+def search_title():
+    # Example: http://127.0.0.1:5000/movie?title=Tarzan
+    title = request.args.get('title')
+    result = query_db(f"SELECT title, country, release_year, listed_in, description FROM netflix WHERE title = '{title}' ORDER BY release_year DESC")
     body = json.dumps(result)
     status = '200'
     response = Response(body, content_type='application/json', status=status)
