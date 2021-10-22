@@ -39,5 +39,23 @@ def rating_children():
     return response
 
 
+@app.route('/rating/family/')
+def rating_family():
+    result = query_db("SELECT title, rating, description FROM netflix WHERE rating = 'PG' OR rating = 'PG-13'")
+    body = json.dumps(result)
+    status = '200'
+    response = Response(body, content_type='application/json', status=status)
+    return response
+
+
+@app.route('/rating/adult/')
+def rating_adult():
+    result = query_db("SELECT title, rating, description FROM netflix WHERE rating = 'R' OR rating = 'NC-17'")
+    body = json.dumps(result)
+    status = '200'
+    response = Response(body, content_type='application/json', status=status)
+    return response
+
+
 if __name__ == '__main__':
     app.run()
