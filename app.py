@@ -1,5 +1,4 @@
 # Урок 14 SQL
-
 import sqlite3
 import json
 from flask import Flask, render_template, request, Response, jsonify
