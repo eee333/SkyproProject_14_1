@@ -1,10 +1,10 @@
 # Урок 14 SQL
 import sqlite3
 import json
-from flask import Flask, render_template, request, Response, jsonify
+from flask import Flask, request, Response
 
 
-def query_db(sqlite_query):
+def query_db(sqlite_query): # Execute query, return list of dict
     with sqlite3.connect("netflix.db") as connection:
         cursor = connection.cursor()
         # sqlite_query = ("SELECT DISTINCT director, title FROM netflix ")
