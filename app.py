@@ -83,5 +83,35 @@ def rating_adult():
     return response
 
 
+@app.route('/cast')
+def cast_search():
+    actor_dic = {} # Return actors and count {'Randall Duk Kim': 2, ...}
+    status = '200'
+    cast = request.args.get('cast')  # Example: http://127.0.0.1:5000/cast?cast=Jack Black, Dustin Hoffman
+    if cast:
+        cast_pair = cast.split(', ')
+        result = query_db(f"SELECT \"cast\" FROM netflix WHERE \"cast\" LIKE '%{cast_pair[0]}%' AND \"cast\" LIKE '%{cast_pair[1]}%'")
+
+        actor_dic = {}
+        i = 1
+        for item in result[:-1]: # all items, but not last
+            for actor in item['cast'].split(', '):
+                if actor not in cast_pair:
+                    for rest_item in result[i:]: # all next items
+                        if actor in rest_item['cast']:
+                            if actor in actor_dic.keys():
+                                actor_dic[actor] += 1
+                            else:
+                                actor_dic[actor] = 2
+            i += 1
+
+    if not actor_dic:
+        actor_dic = {"error": "Not found"}
+        status = '404'
+    body = json.dumps(actor_dic)
+    response = Response(body, content_type='application/json', status=status)
+    return response
+
+
 if __name__ == '__main__':
     app.run()
